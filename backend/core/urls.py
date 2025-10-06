@@ -1,11 +1,14 @@
-# C:\Users\kojim\Documents\deliveryNavigator_clean\backend\core\urls.py
-from django.urls import path
-from .views import heatmap_data, daily_route, daily_summary, weekly_forecast, upload_screenshot
+from django.urls import path, include, re_path
+from django.views.generic import TemplateView
 
 urlpatterns = [
-    path("heatmap-data/", heatmap_data),
-    path("daily-route/", daily_route),
-    path("daily-summary/", daily_summary),
-    path("weekly-forecast/", weekly_forecast),
-    path("upload-screenshot/", upload_screenshot),
+    # あなたの API ルーティング（core/api_urls.py 側に各エンドポイントを定義）
+    path("api/", include("core.api_urls")),
+
+    # ヘルスチェック（任意）
+    path("healthz", TemplateView.as_view(template_name="index.html")),
+
+    # それ以外の全てのパス（/api/ を除く）は SPA の index.html を返す
+    # 例: /records, /read などのクライアントサイドルーティング対応
+    re_path(r"^(?!api/).*", TemplateView.as_view(template_name="index.html")),
 ]
