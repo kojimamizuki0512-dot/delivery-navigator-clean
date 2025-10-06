@@ -1,10 +1,11 @@
+# C:\Users\kojim\Documents\deliveryNavigator_clean\backend\core\urls.py
 from django.urls import path
-from . import views
+from .views import heatmap_data, daily_route, daily_summary, weekly_forecast, upload_screenshot
 
 urlpatterns = [
-    path("heatmap-data/", views.heatmap_data, name="heatmap-data"),
-    path("daily-route/", views.daily_route, name="daily-route"),
-    path("daily-summary/", views.daily_summary, name="daily-summary"),
-    path("weekly-forecast/", views.weekly_forecast, name="weekly-forecast"),
-    path("upload-screenshot/", views.upload_screenshot, name="upload-screenshot"),
+    path("heatmap-data/", heatmap_data),
+    path("daily-route/", daily_route),
+    path("daily-summary/", daily_summary),
+    path("weekly-forecast/", weekly_forecast),
+    path("upload-screenshot/", upload_screenshot),
 ]
