@@ -1,0 +1,38 @@
+# C:\Users\kojim\Documents\deliveryNavigator_clean\render.yaml
+services:
+  - type: web
+    name: dn-backend
+    env: python
+    rootDir: backend
+    region: frankfurt
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py migrate --noinput
+    startCommand: |
+      gunicorn dnbackend.wsgi:application --bind 0.0.0.0:$PORT --preload
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+      - key: DJANGO_SETTINGS_MODULE
+        value: dnbackend.settings
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALLOWED_HOSTS
+        value: "*"
+
+  - type: static
+    name: dn-frontend
+    rootDir: frontend
+    plan: free
+    buildCommand: |
+      npm ci
+      npm run build
+    publishPath: dist
+    envVars:
+      # バックエンドのURLを自動で注入する
+      - key: VITE_API_BASE
+        fromService:
+          type: web
+          name: dn-backend
+          property: url
